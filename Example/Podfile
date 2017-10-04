@@ -1,0 +1,12 @@
+use_frameworks!
+
+target 'Segment-Intercom_Example' do
+  pod 'Segment-Intercom', :path => '../'
+
+  target 'Segment-Intercom_Tests' do
+    inherit! :search_paths
+
+    pod 'Specta'
+  pod 'Expecta'
+  end
+end

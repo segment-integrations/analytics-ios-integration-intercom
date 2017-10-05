@@ -6,8 +6,18 @@
 //
 //
 
-#ifndef SEGIntercomIntegration_h
-#define SEGIntercomIntegration_h
+#import <Foundation/Foundation.h>
+#import <Analytics/SEGIntegration.h>
+#import <Intercom/Intercom.h>
 
 
-#endif /* SEGIntercomIntegration_h */
+@interface SEGIntercomIntegration : NSObject <SEGIntegration>
+
+@property (nonatomic, strong, nonnull) NSDictionary *settings;
+@property (nonatomic, strong, nonnull) SEGAnalytics *analytics;
+
+- (id _Nonnull)initWithSettings:(NSDictionary *_Nonnull)settings;
+@end
+
+
+@end

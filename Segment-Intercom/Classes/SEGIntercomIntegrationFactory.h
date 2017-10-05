@@ -1,13 +1,8 @@
-//
-//  SEGIntercomIntegrationFactory.h
-//  Pods
-//
-//  Created by ladan nasserian on 10/4/17.
-//
-//
+#import <Foundation/Foundation.h>
+#import <Analytics/SEGIntegrationFactory.h>
 
-#ifndef SEGIntercomIntegrationFactory_h
-#define SEGIntercomIntegrationFactory_h
+@interface SEGIntercomIntegrationFactory : NSObject <SEGIntegrationFactory>
 
++ (instancetype)instance;
 
-#endif /* SEGIntercomIntegrationFactory_h */
+@end

@@ -100,7 +100,7 @@
     
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
     for (NSString *key in traits) {
-        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] ||
+        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] &&
             ![[traits valueForKey:key] isKindOfClass:[NSNumber class]]) {
             [customAttributes removeObjectForKey:key];
         }
@@ -137,28 +137,28 @@
     }
     
     if(traits[@"userId"]) {
-        userAttributes.email = traits[@"userId"];
+        userAttributes.userId = traits[@"userId"];
         [customAttributes removeObjectForKey:@"userId"];
     }
     
     if(traits[@"name"]) {
-        userAttributes.email = traits[@"name"];
+        userAttributes.name = traits[@"name"];
         [customAttributes removeObjectForKey:@"name"];
     }
     
     if(traits[@"phone"]) {
-        userAttributes.email = traits[@"phone"];
+        userAttributes.phone = traits[@"phone"];
         [customAttributes removeObjectForKey:@"phone"];
     }
     
     NSDictionary *integration = [payload.integrations valueForKey:@"intercom"];
     if(integration[@"languageOverride"]) {
-        userAttributes.languageOverride = traits[@"language"];
+        userAttributes.languageOverride = integration[@"languageOverride"];
     }
     
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
     for (NSString *key in traits) {
-        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] ||
+        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] &&
             ![[traits valueForKey:key] isKindOfClass:[NSNumber class]]) {
             [customAttributes removeObjectForKey:key];
         }

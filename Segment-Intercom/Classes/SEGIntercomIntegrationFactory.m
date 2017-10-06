@@ -21,7 +21,7 @@
 }
 
 
-- (id<SEGIntegration>)createWithSettings:(NSDictionary *)settings
+- (id<SEGIntegration>)createWithSettings:(NSDictionary *)settings forAnalytics:(nonnull SEGAnalytics *)analytics
 {
     return [[SEGIntercomIntegration alloc] initWithSettings:settings];
 }

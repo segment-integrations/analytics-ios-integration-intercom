@@ -10,39 +10,89 @@
 
 SpecBegin(InitialSpecs)
 
-describe(@"these will fail", ^{
-
-    it(@"can do maths", ^{
-        expect(1).to.equal(2);
-    });
-
-    it(@"can read", ^{
-        expect(@"number").to.equal(@"string");
-    });
+describe(@"SEGIntercomIntegration", ^{
+    __block Intercom *mockIntercom;
+    __block SEGIntercomIntegration *integration;
     
-    it(@"will wait for 10 seconds and fail", ^{
-        waitUntil(^(DoneCallback done) {
+    beforeEach(^{
+        NSString *apiKey = @"ios_sdk-c499a81c815fdd6943d4ef2fc4e85df78933931b";
+        NSString *iOSAppId = @"mm48vhil";
+        mockIntercom = mockClass([Intercom class]);
         
+        integration = [[SEGIntercomIntegration alloc] initWithSettings:@{
+                                                                         @"apiKey":apiKey,
+                                                                         @"iOSAppId": iOSAppId
+                                                                         } andIntercom:mockIntercom];
+        
+    });
+    
+    describe(@"track known users", ^{
+        beforeEach(^{
+            SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:@"3942084234230" anonymousId:nil traits:@{
+                                                                                                                                       @"gender" : @"female",
+                                                                                                                                       @"company" : @"segment",
+                                                                                                                                       @"name" : @"ladan"
+                                                                                                                                       } context:@{}
+                                                                                integrations:@{}];
+            [integration identify:identifyPayload];
+//            [verify(mockIntercom) registerUserWithUserId:@"3942084234230"];
+        });
+        
+        it(@"calls track without properties", ^{
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Event" properties:@{} context:@{
+                                                                                                                       } integrations:@{}];
+            
+            [integration track:payload];
+            [verify(mockIntercom) logEventWithName:@"Event"];
+        });
+
+        it(@"calls track with properties", ^{
+            NSDictionary *properties = @{
+                                         @"name" : @"Bob",
+                                         @"gender" : @"male"
+                                         };
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Event" properties:properties context:@{
+                                                                                                                       } integrations:@{}];
+            
+            [integration track:payload];
+            [verify(mockIntercom) logEventWithName:@"Event" metaData:properties];
         });
     });
+    
+    describe(@"track unknown users", ^{
+        beforeEach(^{
+            SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:nil anonymousId:@"324908523402" traits:@{
+                                                                                                                                       @"gender" : @"female",
+                                                                                                                                       @"company" : @"segment",
+                                                                                                                                       @"name" : @"ladan"
+                                                                                                                                       } context:@{}
+                                                                                integrations:@{}];
+            [integration identify:identifyPayload];
+            [verify(mockIntercom) registerUnidentifiedUser];
+        });
+        
+        it(@"calls track with properties", ^{
+            NSDictionary *properties = @{
+                                         @"name" : @"Bob",
+                                         @"gender" : @"male"
+                                         };
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Event" properties:properties context:@{
+                                                                                                                       } integrations:@{}];
+            
+            [integration track:payload];
+        });
+        
+        it(@"calls track without properties", ^{
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Event" properties:@{} context:@{
+                                                                                                                       } integrations:@{}];
+            
+            [integration track:payload];
+            [verify(mockIntercom) logEventWithName:@"Event"];
+        });
+    });
+
 });
 
-describe(@"these will pass", ^{
-    
-    it(@"can do maths", ^{
-        expect(1).beLessThan(23);
-    });
-    
-    it(@"can read", ^{
-        expect(@"team").toNot.contain(@"I");
-    });
-    
-    it(@"will wait and succeed", ^{
-        waitUntil(^(DoneCallback done) {
-            done();
-        });
-    });
-});
 
 SpecEnd
 

@@ -19,14 +19,28 @@
 {
     if(self = [super init]) {
         self.settings = settings;
+        self.intercom = [Intercom class];
+        
+        NSString *apiKey = settings[@"apiKey"];
+        NSString *iOSAppId = settings[@"iOSAppId"];
+        
+        [self.intercom setApiKey:apiKey forAppId:iOSAppId];
+        SEGLog(@"[self.intercom setApiKey:%@ forAppId:%@];",apiKey, iOSAppId);
+        
+        // For testing
+        [self.intercom enableLogging];
     }
     
-    NSString *apiKey = settings[@"apiKey"];
-    NSString *iOSAppId = settings[@"iOSAppId"];
-    
-    [Intercom setApiKey:apiKey forAppId:iOSAppId];
-    // For testing
-    [Intercom enableLogging];
+
+    return self;
+}
+
+- (instancetype)initWithSettings:(NSDictionary *)settings andIntercom:(Class)intercom
+{
+    if (self = [super init]) {
+        self.settings = settings;
+        self.intercom = intercom;
+    }
     return self;
 }
 
@@ -35,10 +49,10 @@
     
     // Intercom allows users to choose to track only known or only unknown users, as well as both. Segment will support the ability to track both by checking for loggedIn users (determined by the userId) and falling back to setting the user as "Unidentified" if this is not present.
     if(payload.userId) {
-        [Intercom registerUserWithUserId:payload.userId];
+        [self.intercom registerUserWithUserId:payload.userId];
         SEGLog(@"[Intercom registerUserWithUserId:%@];", payload.userId);
     } else if(payload.anonymousId) {
-        [Intercom registerUnidentifiedUser];
+        [self.intercom registerUnidentifiedUser];
         SEGLog(@"[Intercom registerUnidentifiedUser];");
     }
     
@@ -49,9 +63,14 @@
 
 -(void)track:(SEGTrackPayload *)payload
 {
-    [Intercom logEventWithName:payload.event metaData:payload.properties];
+    //'customAttributes' must be a non empty NSDictionary
+    if([payload.properties count] == 0) {
+        [self.intercom logEventWithName:payload.event];
+        SEGLog(@"[Intercom logEventWithName:%@];", payload.event);
+        return;
+    }
+    [self.intercom logEventWithName:payload.event metaData:payload.properties];
     SEGLog(@"[Intercom logEventWithName:%@ metaData:%@];", payload.event, payload.properties);
-
 }
 
 -(void)group:(SEGGroupPayload *)payload
@@ -61,7 +80,7 @@
     company.companyId = payload.groupId;
     
     NSDictionary *traits = payload.traits;
-    NSMutableDictionary *customAttributes = [NSMutableDictionary dictionaryWithDictionary:traits];
+    NSMutableDictionary *customAttributes = [NSMutableDictionary dictionaryWithDictionary:[traits copy]];
     
     if (traits[@"name"]) {
         company.name = traits[@"name"];
@@ -80,9 +99,9 @@
     };
     
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
-    for (NSString *key in customAttributes) {
-        if (![[customAttributes valueForKey:key] isKindOfClass:[NSString class]] ||
-            ![[customAttributes valueForKey:key] isKindOfClass:[NSNumber class]]) {
+    for (NSString *key in traits) {
+        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] ||
+            ![[traits valueForKey:key] isKindOfClass:[NSNumber class]]) {
             [customAttributes removeObjectForKey:key];
         }
     }
@@ -91,14 +110,14 @@
     
     ICMUserAttributes *userAttributes = [ICMUserAttributes new];
     userAttributes.companies = @[company];
-    [Intercom updateUser:userAttributes];
+    [self.intercom updateUser:userAttributes];
     SEGLog(@"[Intercom updateUser:%@];", userAttributes);
 
 }
 
 -(void)reset
 {
-    [Intercom reset];
+    [self.intercom reset];
     SEGLog(@" [Intercom reset];");
 }
 
@@ -110,7 +129,7 @@
     ICMUserAttributes *userAttributes = [ICMUserAttributes new];
     
     NSDictionary *traits = payload.traits;
-    NSMutableDictionary *customAttributes = [NSMutableDictionary dictionaryWithDictionary:traits];
+    NSMutableDictionary *customAttributes = [NSMutableDictionary dictionaryWithDictionary:[traits copy]];
     
     if(traits[@"email"]) {
         userAttributes.email = traits[@"email"];
@@ -138,15 +157,15 @@
     }
     
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
-    for (NSString *key in customAttributes) {
-        if (![[customAttributes valueForKey:key] isKindOfClass:[NSString class]] ||
-            ![[customAttributes valueForKey:key] isKindOfClass:[NSNumber class]]) {
+    for (NSString *key in traits) {
+        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] ||
+            ![[traits valueForKey:key] isKindOfClass:[NSNumber class]]) {
             [customAttributes removeObjectForKey:key];
         }
     }
     
     userAttributes.customAttributes = customAttributes;
-    [Intercom updateUser:userAttributes];
+    [self.intercom updateUser:userAttributes];
     SEGLog(@"[Intercom updateUser:%@];", userAttributes);
 
 }

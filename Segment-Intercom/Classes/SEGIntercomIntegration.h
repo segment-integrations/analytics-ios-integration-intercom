@@ -14,10 +14,10 @@
 @interface SEGIntercomIntegration : NSObject <SEGIntegration>
 
 @property (nonatomic, strong, nonnull) NSDictionary *settings;
-@property (nonatomic, strong, nonnull) SEGAnalytics *analytics;
+@property (nonatomic, strong) Class intercom;
 
-- (id _Nonnull)initWithSettings:(NSDictionary *_Nonnull)settings;
+- (instancetype)initWithSettings:(NSDictionary *_Nonnull)settings;
+- (instancetype)initWithSettings:(NSDictionary *)settings andIntercom:(id)intercom;
+
 @end
 
-
-@end

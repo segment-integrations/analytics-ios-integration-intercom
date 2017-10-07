@@ -78,41 +78,15 @@
     // id is a required field for adding or modifying a company.
     ICMCompany *company = [ICMCompany new];
     company.companyId = payload.groupId;
-    
-    NSDictionary *traits = payload.traits;
-    NSMutableDictionary *customAttributes = [NSMutableDictionary dictionaryWithDictionary:[traits copy]];
-    
-    if (traits[@"name"]) {
-        company.name = traits[@"name"];
-        [customAttributes removeObjectForKey:@"name"];
-    }
-    
-    if (traits[@"monthly_spend"]) {
-        company.monthlySpend = traits[@"monthly_spend"];
-        [customAttributes removeObjectForKey:@"monthly_spend"];
 
-    };
-    
-    if (traits[@"plan"]) {
-        company.plan = traits[@"plan"];
-        [customAttributes removeObjectForKey:@"plan"];
-    };
-    
-    // Intercom requires each value must be of type NSString, NSNumber or NSNull.
-    for (NSString *key in traits) {
-        if (![[traits valueForKey:key] isKindOfClass:[NSString class]] &&
-            ![[traits valueForKey:key] isKindOfClass:[NSNumber class]]) {
-            [customAttributes removeObjectForKey:key];
-        }
-    }
-    
-    company.customAttributes = customAttributes;
+    [self setCompanyAttributes:payload.traits andCompany:company];
+    company = [self setCompanyAttributes:payload.traits andCompany:company];
     
     ICMUserAttributes *userAttributes = [ICMUserAttributes new];
     userAttributes.companies = @[company];
+    
     [self.intercom updateUser:userAttributes];
     SEGLog(@"[Intercom updateUser:%@];", userAttributes);
-
 }
 
 -(void)reset
@@ -151,6 +125,17 @@
         [customAttributes removeObjectForKey:@"phone"];
     }
     
+    //TODO: determine if we should guard for this
+    if(traits[@"company"] && [traits[@"company"] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *companyTraits = traits[@"company"];
+        // id is a required field for adding or modifying a company.
+        ICMCompany *company = [ICMCompany new];
+        company.companyId = companyTraits[@"id"];
+        
+        company = [self setCompanyAttributes:companyTraits andCompany:company];
+        userAttributes.companies = @[company];
+    }
+    
     NSDictionary *integration = [payload.integrations valueForKey:@"intercom"];
     if(integration[@"languageOverride"]) {
         userAttributes.languageOverride = integration[@"languageOverride"];
@@ -168,6 +153,40 @@
     [self.intercom updateUser:userAttributes];
     SEGLog(@"[Intercom updateUser:%@];", userAttributes);
 
+}
+
+-(ICMCompany *)setCompanyAttributes:(NSDictionary *)companyTraits andCompany:(ICMCompany *)company
+{
+    NSMutableDictionary *customAttributes = [NSMutableDictionary dictionaryWithDictionary:[companyTraits copy]];
+    [customAttributes removeObjectForKey:@"id"];
+
+    if (companyTraits[@"name"]) {
+        company.name = companyTraits[@"name"];
+        [customAttributes removeObjectForKey:@"name"];
+    }
+    
+    if (companyTraits[@"monthly_spend"]) {
+        company.monthlySpend = companyTraits[@"monthly_spend"];
+        [customAttributes removeObjectForKey:@"monthly_spend"];
+        
+    };
+    
+    if (companyTraits[@"plan"]) {
+        company.plan = companyTraits[@"plan"];
+        [customAttributes removeObjectForKey:@"plan"];
+    };
+    
+    // Intercom requires each value must be of type NSString, NSNumber or NSNull.
+    for (NSString *key in companyTraits) {
+        if (![[companyTraits valueForKey:key] isKindOfClass:[NSString class]] &&
+            ![[companyTraits valueForKey:key] isKindOfClass:[NSNumber class]]) {
+            [customAttributes removeObjectForKey:key];
+        }
+    }
+    
+    company.customAttributes = customAttributes;
+    
+    return company;
 }
 
 @end

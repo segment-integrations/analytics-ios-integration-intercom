@@ -26,8 +26,8 @@ describe(@"SEGIntercomIntegration", ^{
     });
     
     beforeEach(^{
-        NSString *apiKey = @"ios_sdk-c499a81c815fdd6943d4ef2fc4e85df78933931b";
-        NSString *iOSAppId = @"mm48vhil";
+        NSString *apiKey = @"foo";
+        NSString *iOSAppId = @"bar";
         mockIntercom = mockClass([Intercom class]);
         
         integration = [[SEGIntercomIntegration alloc] initWithSettings:@{
@@ -142,7 +142,13 @@ describe(@"SEGIntercomIntegration", ^{
         it(@"identifies an unknown user with traits", ^{
             SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:nil anonymousId:@"324908523402" traits:@{
                                                                                                                                       @"gender" : @"female",
-                                                                                                                                      @"company" : @"segment",
+                                                                                                                                      @"company" : @{
+                                                                                                                                              @"id":@"1234",
+                                                                                                                                              @"name":@"Initech",
+                                                                                                                                              @"industry":@"Technology",
+                                                                                                                                              @"employees":@329,
+                                                                                                                                              @"plan":@"enterprise"
+                                                                                                                                              },
                                                                                                                                       @"name" : @"ladan"
                                                                                                                                       } context:@{}
                                                                                 integrations:@{                                                                                                   @"intercom": @{
@@ -153,9 +159,19 @@ describe(@"SEGIntercomIntegration", ^{
             userAttributes.name = @"ladan";
             userAttributes.languageOverride = @"cn-zh";
             userAttributes.customAttributes = @{
-                                                @"gender" : @"female",
-                                                @"company" : @"segment"
+                                                @"gender" : @"female"
                                                 };
+            
+            ICMCompany *company = [ICMCompany new];
+            company.companyId = @"1234";
+            company.name = @"Initech";
+            company.plan = @"enterprise";
+            company.customAttributes = @{
+                                         @"industry": @"Technology",
+                                         @"employees": @329
+                                         };
+            
+            userAttributes.companies = @[company];
             
             [integration identify:identifyPayload];
             [verify(mockIntercom) updateUser:userAttributes];

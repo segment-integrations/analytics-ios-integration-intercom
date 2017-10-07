@@ -5,7 +5,7 @@ before_install:
   - gem install cocoapods # Since Travis is not always on latest version
   - gem install xcpretty
 script:
-  - pod lib lint --use-libraries
+  - pod lib lint --use-libraries --allow-warnings
   - make install
   - make test
 

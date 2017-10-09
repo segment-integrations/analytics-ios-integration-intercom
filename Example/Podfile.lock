@@ -6,7 +6,7 @@ PODS:
   - OCMockito (5.0.1):
     - OCHamcrest (~> 7.0)
   - Segment-Intercom (0.1.0):
-    - Analytics (~> 3.0)
+    - Analytics (~> 3.5)
     - Intercom
   - Specta (1.0.6)
 
@@ -26,7 +26,7 @@ SPEC CHECKSUMS:
   Intercom: ae00cdfc0cd0a12d38f73f6a93c55907add04606
   OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
   OCMockito: 063837a086c058e764fcd23e771089c1759e7197
-  Segment-Intercom: 6cd7dee525fe07cee1ddf90bda0e9d44c31d34ae
+  Segment-Intercom: bab53e2f21efdbeedac51784a0f24edeae554856
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
 
 PODFILE CHECKSUM: 100d4f5cd3c7ef945ac514ce9fe0b6bb0bd87f17

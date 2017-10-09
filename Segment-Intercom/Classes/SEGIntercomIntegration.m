@@ -46,7 +46,6 @@
 
 -(void)identify:(SEGIdentifyPayload *)payload
 {
-    
     // Intercom allows users to choose to track only known or only unknown users, as well as both. Segment will support the ability to track both by checking for loggedIn users (determined by the userId) and falling back to setting the user as "Unidentified" if this is not present.
     if(payload.userId) {
         [self.intercom registerUserWithUserId:payload.userId];

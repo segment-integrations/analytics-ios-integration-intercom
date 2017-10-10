@@ -23,17 +23,17 @@
     configuration.recordScreenViews = YES;
     [SEGAnalytics debug:YES];
 
-    
+
     [configuration use:[SEGIntercomIntegrationFactory instance]];
     [SEGAnalytics setupWithConfiguration:configuration];
-    [[SEGAnalytics sharedAnalytics] track:@"Testing if malformed"];
-    [[SEGAnalytics sharedAnalytics] identify:@"3942084234230" traits:@{
-                                                                       @"gender" : @"female",
-                                                                       @"company" : @"segment",
-                                                                       @"name" : @"ladan"
-                                                                       }];
+    [[SEGAnalytics sharedAnalytics] track:@"Testing second event from anony user"];
+    [[SEGAnalytics sharedAnalytics] identify:nil traits:@{
+        @"gender" : @"male",
+        @"company" : @"self",
+        @"name" : @"troy"
+    }];
 
-    
+
     return YES;
 }
 

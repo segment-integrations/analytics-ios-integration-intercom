@@ -17,8 +17,7 @@
 @property (nonatomic, strong, nonnull) NSDictionary *settings;
 @property (nonatomic, strong) Class _Nullable intercom;
 
-- (instancetype _Nullable )initWithSettings:(NSDictionary *_Nonnull)settings;
-- (instancetype _Nullable )initWithSettings:(NSDictionary *_Nullable)settings andIntercom:(id _Nullable )intercom;
+- (instancetype _Nonnull)initWithSettings:(NSDictionary *_Nonnull)settings;
+- (instancetype _Nullable)initWithSettings:(NSDictionary *_Nullable)settings andIntercom:(id _Nullable)intercom;
 
 @end
-

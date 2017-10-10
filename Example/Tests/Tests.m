@@ -16,23 +16,20 @@ describe(@"SEGIntercomIntegration", ^{
     
     describe(@"SEGIntercomIntegrationFactory", ^{
         it(@"factory creates integration with basic settings", ^{
-            SEGIntercomIntegration *integration = [[SEGIntercomIntegrationFactory instance] createWithSettings:@{
-                                                                                                                   @"apiKey" : @"foo",
-                                                                                                                   @"iOSAppId": @"bar"
+            SEGIntercomIntegration *integration = [[SEGIntercomIntegrationFactory instance] createWithSettings:@{@"mobileApiKey" : @"ios_sdk-c499a81c815fdd6943d4ef2fc4e85df78933931b",
+                                                                                                                 @"appId": @"mm48vhil"
                                                                                                                    } forAnalytics:nil];
             
-            expect(integration.settings).to.equal(@{ @"apiKey" : @"foo", @"iOSAppId": @"bar" });
+            expect(integration.settings).to.equal(@{ @"mobileApiKey" : @"ios_sdk-c499a81c815fdd6943d4ef2fc4e85df78933931b", @"appId": @"mm48vhil" });
         });
     });
     
     beforeEach(^{
-        NSString *apiKey = @"foo";
-        NSString *iOSAppId = @"bar";
         mockIntercom = mockClass([Intercom class]);
         
         integration = [[SEGIntercomIntegration alloc] initWithSettings:@{
-                                                                         @"apiKey":apiKey,
-                                                                         @"iOSAppId": iOSAppId
+                                                                         @"mobileApiKey":@"ios_sdk-c499a81c815fdd6943d4ef2fc4e85df78933931b",
+                                                                         @"appId": @"mm48vhil"
                                                                          } andIntercom:mockIntercom];
         
     });

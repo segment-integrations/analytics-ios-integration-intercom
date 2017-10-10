@@ -21,14 +21,11 @@
         self.settings = settings;
         self.intercom = [Intercom class];
         
-        NSString *apiKey = settings[@"apiKey"];
-        NSString *iOSAppId = settings[@"iOSAppId"];
+        NSString *mobileApiKey = settings[@"mobileApiKey"];
+        NSString *appId = settings[@"appId"];
         
-        [self.intercom setApiKey:apiKey forAppId:iOSAppId];
-        SEGLog(@"[self.intercom setApiKey:%@ forAppId:%@];",apiKey, iOSAppId);
-        
-        // For testing
-        [self.intercom enableLogging];
+        [self.intercom setApiKey:mobileApiKey forAppId:appId];
+        SEGLog(@"[self.intercom setApiKey:%@ forAppId:%@];",mobileApiKey, appId);
     }
     
 
@@ -55,9 +52,12 @@
         SEGLog(@"[Intercom registerUnidentifiedUser];");
     }
     
-    if(payload.traits) {
-        [self setUserAttributes:payload];
+    if([payload.traits count] == 0) {
+        return;
     }
+    
+    [self setUserAttributes:payload];
+
 }
 
 -(void)track:(SEGTrackPayload *)payload
@@ -143,7 +143,8 @@
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
     for (NSString *key in traits) {
         if (![[traits valueForKey:key] isKindOfClass:[NSString class]] &&
-            ![[traits valueForKey:key] isKindOfClass:[NSNumber class]]) {
+            ![[traits valueForKey:key] isKindOfClass:[NSNumber class]] &&
+            ![[traits valueForKey:key] isKindOfClass:[NSNull class]]) {
             [customAttributes removeObjectForKey:key];
         }
     }
@@ -178,7 +179,8 @@
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
     for (NSString *key in companyTraits) {
         if (![[companyTraits valueForKey:key] isKindOfClass:[NSString class]] &&
-            ![[companyTraits valueForKey:key] isKindOfClass:[NSNumber class]]) {
+            ![[companyTraits valueForKey:key] isKindOfClass:[NSNumber class]] &&
+            ![[companyTraits valueForKey:key] isKindOfClass:[NSNull class]]) {
             [customAttributes removeObjectForKey:key];
         }
     }

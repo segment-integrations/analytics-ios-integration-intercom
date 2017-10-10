@@ -1,3 +1,4 @@
+
 //
 //  SEGIntercomIntegration.h
 //  Pods
@@ -14,10 +15,10 @@
 @interface SEGIntercomIntegration : NSObject <SEGIntegration>
 
 @property (nonatomic, strong, nonnull) NSDictionary *settings;
-@property (nonatomic, strong) Class intercom;
+@property (nonatomic, strong) Class _Nullable intercom;
 
-- (instancetype)initWithSettings:(NSDictionary *_Nonnull)settings;
-- (instancetype)initWithSettings:(NSDictionary *)settings andIntercom:(id)intercom;
+- (instancetype _Nullable )initWithSettings:(NSDictionary *_Nonnull)settings;
+- (instancetype _Nullable )initWithSettings:(NSDictionary *_Nullable)settings andIntercom:(id _Nullable )intercom;
 
 @end
 

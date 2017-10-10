@@ -150,7 +150,7 @@ describe(@"SEGIntercomIntegration", ^{
                 @"name" : @"ladan"
             } context:@{}
                                                                                 integrations:@{ @"intercom" : @{
-                                                                                    @"languageOverride" : @"cn-zh"
+                                                                                    @"language_override" : @"cn-zh"
                                                                                 }
                                                                                 }];
             ICMUserAttributes *userAttributes = [ICMUserAttributes new];
@@ -176,12 +176,18 @@ describe(@"SEGIntercomIntegration", ^{
         });
 
         it(@"identfied a known user with traits", ^{
+            NSDateComponents *comps = [[NSDateComponents alloc] init];
+            [comps setDay:10];
+            [comps setMonth:10];
+            [comps setYear:2010];
+            NSDate *signedUpDate = [[NSCalendar currentCalendar] dateFromComponents:comps];
             SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:@"3942084234230" anonymousId:nil traits:@{
                 @"email" : @"friends@segment.com",
                 @"gender" : @"female",
                 @"company" : @"segment",
                 @"name" : @"ladan",
                 @"phone" : @"555-555-5555",
+                @"created_at" : signedUpDate,
                 @"address" : @{
                     @"street" : @"6th St",
                     @"city" : @"San Francisco",
@@ -195,6 +201,7 @@ describe(@"SEGIntercomIntegration", ^{
             userAttributes.email = @"friends@segment.com";
             userAttributes.name = @"ladan";
             userAttributes.phone = @"555-555-5555";
+            userAttributes.signedUpAt = signedUpDate;
             userAttributes.customAttributes = @{
                 @"gender" : @"female",
                 @"company" : @"segment"

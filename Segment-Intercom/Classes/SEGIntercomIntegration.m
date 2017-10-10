@@ -108,9 +108,9 @@
         [customAttributes removeObjectForKey:@"email"];
     }
 
-    if (traits[@"userId"]) {
-        userAttributes.userId = traits[@"userId"];
-        [customAttributes removeObjectForKey:@"userId"];
+    if (traits[@"user_id"]) {
+        userAttributes.userId = traits[@"user_id"];
+        [customAttributes removeObjectForKey:@"user_id"];
     }
 
     if (traits[@"name"]) {
@@ -122,6 +122,11 @@
         userAttributes.phone = traits[@"phone"];
         [customAttributes removeObjectForKey:@"phone"];
     }
+
+    if (traits[@"created_at"]) {
+        userAttributes.signedUpAt = traits[@"created_at"];
+        [customAttributes removeObjectForKey:@"created_at"];
+    };
 
     //TODO: determine if we should guard for this
     if (traits[@"company"] && [traits[@"company"] isKindOfClass:[NSDictionary class]]) {
@@ -135,8 +140,12 @@
     }
 
     NSDictionary *integration = [payload.integrations valueForKey:@"intercom"];
-    if (integration[@"languageOverride"]) {
-        userAttributes.languageOverride = integration[@"languageOverride"];
+    if (integration[@"language_override"]) {
+        userAttributes.languageOverride = integration[@"language_override"];
+    }
+
+    if (integration[@"unsubscribed"]) {
+        userAttributes.unsubscribedFromEmails = [integration[@"unsubscribed"] boolValue];
     }
 
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.
@@ -171,6 +180,11 @@
     if (companyTraits[@"plan"]) {
         company.plan = companyTraits[@"plan"];
         [customAttributes removeObjectForKey:@"plan"];
+    };
+
+    if (companyTraits[@"created_at"]) {
+        company.createdAt = companyTraits[@"created_at"];
+        [customAttributes removeObjectForKey:@"created_at"];
     };
 
     // Intercom requires each value must be of type NSString, NSNumber or NSNull.

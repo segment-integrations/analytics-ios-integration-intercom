@@ -74,9 +74,47 @@
         SEGLog(@"[Intercom logEventWithName:%@];", payload.event);
         return;
     }
-    [self.intercom logEventWithName:payload.event metaData:payload.properties];
-    SEGLog(@"[Intercom logEventWithName:%@ metaData:%@];", payload.event, payload.properties);
+
+
+    NSMutableDictionary *original = [NSMutableDictionary dictionaryWithDictionary:payload.properties];
+    NSMutableDictionary *output = [NSMutableDictionary dictionaryWithCapacity:payload.properties.count];
+
+    NSMutableDictionary *price = [NSMutableDictionary dictionaryWithCapacity:0];
+
+    [original enumerateKeysAndObjectsUsingBlock:^(id key, id data, BOOL *stop) {
+
+        [output setObject:data forKey:key];
+        if ([key isEqual:@"revenue"] || [key isEqual:@"total"]) {
+            double dataValue = [data doubleValue];
+            long amountInCents = dataValue * 100;
+            NSNumber *finalAmount = [[NSNumber alloc] initWithLong:amountInCents];
+            [price setObject:finalAmount forKey:@"amount"];
+
+            [original removeObjectForKey:@"revenue"];
+            [original removeObjectForKey:@"total"];
+
+            [output removeObjectForKey:@"revenue"];
+            [output removeObjectForKey:@"total"];
+        }
+
+        if ([key isEqual:@"currency"]) {
+            [price setObject:data forKey:@"currency"];
+            [output removeObjectForKey:key];
+        }
+
+        if (price.count > 0) {
+            [output setObject:price forKey:@"price"];
+        }
+
+        if ([data isKindOfClass:[NSDictionary class]] || [data isKindOfClass:[NSArray class]]) {
+            [output removeObjectForKey:key];
+        }
+    }];
+
+    [self.intercom logEventWithName:payload.event metaData:output];
+    SEGLog(@"[Intercom logEventWithName:%@ metaData:%@];", payload.event, output);
 }
+
 
 - (void)group:(SEGGroupPayload *)payload
 {

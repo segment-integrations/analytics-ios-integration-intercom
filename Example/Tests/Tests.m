@@ -150,6 +150,7 @@ describe(@"SEGIntercomIntegration", ^{
                 @"name" : @"ladan"
             } context:@{}
                                                                                 integrations:@{ @"intercom" : @{
+                                                                                    @"user_hash" : @"324i2u4209",
                                                                                     @"language_override" : @"cn-zh"
                                                                                 }
                                                                                 }];

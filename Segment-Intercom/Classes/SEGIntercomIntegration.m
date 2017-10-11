@@ -53,6 +53,12 @@
         SEGLog(@"[Intercom registerUnidentifiedUser];");
     }
 
+    NSDictionary *integration = [payload.integrations valueForKey:@"intercom"];
+    if (integration[@"user_hash"]) {
+        NSString *userHash = integration[@"user_hash"];
+        [self.intercom setUserHash:userHash];
+    }
+
     if ([payload.traits count] == 0) {
         return;
     }

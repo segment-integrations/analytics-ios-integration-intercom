@@ -1,4 +1,4 @@
-PRETTY := xcpretty -c && exit ${PIPESTATUS[0]}
+XCPRETTY := xcpretty -c && exit ${PIPESTATUS[0]}
 
 SDK ?= "iphonesimulator"
 DESTINATION ?= "platform=iOS Simulator,name=iPhone 5"
@@ -17,12 +17,6 @@ build:
 
 test:
 	xcodebuild test $(XC_ARGS) | $(XCPRETTY)
-
-xcbuild:
-	xctool $(XC_ARGS)
-
-xctest:
-	xctool test $(XC_ARGS)
 
 .PHONY: test build xctest xcbuild clean
 .SILENT:

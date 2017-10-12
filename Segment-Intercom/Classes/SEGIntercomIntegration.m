@@ -86,8 +86,8 @@
         [output setObject:data forKey:key];
         if ([key isEqual:@"revenue"] || [key isEqual:@"total"]) {
             double dataValue = [data doubleValue];
-            long amountInCents = dataValue * 100;
-            NSNumber *finalAmount = [[NSNumber alloc] initWithLong:amountInCents];
+            int amountInCents = dataValue * 100;
+            NSNumber *finalAmount = [[NSNumber alloc] initWithInt:amountInCents];
             [price setObject:finalAmount forKey:@"amount"];
 
             [original removeObjectForKey:@"revenue"];

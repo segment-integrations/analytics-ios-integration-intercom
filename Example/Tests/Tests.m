@@ -304,7 +304,7 @@ describe(@"SEGIntercomIntegration", ^{
             [verify(mockIntercom) updateUser:userAttributes];
         });
 
-        it(@"identfied a known user with traits", ^{
+        it(@"identfies a known user with traits", ^{
             NSDateComponents *comps = [[NSDateComponents alloc] init];
             [comps setDay:10];
             [comps setMonth:10];
@@ -338,6 +338,13 @@ describe(@"SEGIntercomIntegration", ^{
 
             [integration identify:identifyPayload];
             [verify(mockIntercom) updateUser:userAttributes];
+        });
+
+        it(@"identfies a known user without traits", ^{
+            SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:@"3942084234230" anonymousId:nil traits:@{} context:@{} integrations:@{}];
+
+            [integration identify:identifyPayload];
+            [verify(mockIntercom) registerUserWithUserId:@"3942084234230"];
         });
 
         it(@"resets user", ^{

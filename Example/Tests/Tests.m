@@ -102,6 +102,84 @@ describe(@"SEGIntercomIntegration", ^{
 
             [verify(mockIntercom) updateUser:userAttributes];
         });
+
+        it(@"calls track with revenue and total", ^{
+            NSDictionary *properties = @{
+                @"checkout_id" : @"9bcf000000000000",
+                @"order_id" : @"50314b8e",
+                @"affiliation" : @"App Store",
+                @"total" : @30.45,
+                @"shipping" : @5.05,
+                @"tax" : @1.20,
+                @"currency" : @"USD",
+                @"category" : @"Games",
+                @"revenue" : @8,
+                @"products" : @{
+                    @"product_id" : @"2013294",
+                    @"category" : @"Games",
+                    @"name" : @"Monopoly: 3rd Edition",
+                    @"brand" : @"Hasbros",
+                    @"price" : @"21.99",
+                    @"quantity" : @"1"
+                }
+            };
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Order Completed" properties:properties context:@{} integrations:@{}];
+            [integration track:payload];
+            NSDictionary *expected = @{
+                @"checkout_id" : @"9bcf000000000000",
+                @"order_id" : @"50314b8e",
+                @"affiliation" : @"App Store",
+                @"price" : @{
+                    @"amount" : @800,
+                    @"currency" : @"USD",
+                },
+                @"shipping" : @5.05,
+                @"tax" : @1.20,
+                @"category" : @"Games",
+                @"total" : @30.45
+
+            };
+            [verify(mockIntercom) logEventWithName:@"Order Completed" metaData:expected];
+
+        });
+
+        it(@"calls track with just total", ^{
+            NSDictionary *properties = @{
+                @"checkout_id" : @"9bcf000000000000",
+                @"order_id" : @"50314b8e",
+                @"affiliation" : @"App Store",
+                @"shipping" : @5.05,
+                @"tax" : @1.20,
+                @"currency" : @"USD",
+                @"category" : @"Games",
+                @"total" : @30.45,
+                @"products" : @{
+                    @"product_id" : @"2013294",
+                    @"category" : @"Games",
+                    @"name" : @"Monopoly: 3rd Edition",
+                    @"brand" : @"Hasbros",
+                    @"price" : @"21.99",
+                    @"quantity" : @"1"
+                }
+            };
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Order Completed" properties:properties context:@{} integrations:@{}];
+            [integration track:payload];
+            NSDictionary *expected = @{
+                @"checkout_id" : @"9bcf000000000000",
+                @"order_id" : @"50314b8e",
+                @"affiliation" : @"App Store",
+                @"price" : @{
+                    @"amount" : @3045,
+                    @"currency" : @"USD",
+                },
+                @"shipping" : @5.05,
+                @"tax" : @1.20,
+                @"category" : @"Games"
+            };
+            [verify(mockIntercom) logEventWithName:@"Order Completed" metaData:expected];
+
+        });
+
     });
 
     describe(@"track unknown users", ^{
@@ -133,6 +211,56 @@ describe(@"SEGIntercomIntegration", ^{
 
             [integration track:payload];
             [verify(mockIntercom) logEventWithName:@"Event"];
+        });
+
+        it(@"calls track with just revenue", ^{
+            NSDictionary *properties = @{
+                @"order_id" : @"50314b8e9bcf000000000000",
+                @"affiliation" : @"Google Store",
+                @"value" : @30,
+                @"revenue" : @25,
+                @"shipping" : @3,
+                @"tax" : @2,
+                @"discount" : @2.5,
+                @"coupon" : @"hasbro",
+                @"currency" : @"USD",
+                @"products" : @[
+                    @{
+                       @"product_id" : @"507f1f77bcf86cd799439011",
+                       @"sku" : @"45790-32",
+                       @"name" : @"Monopoly: 3rd Edition",
+                       @"price" : @19,
+                       @"quantity" : @1,
+                       @"category" : @"Games",
+                       @"url" : @"https://www.company.com/product/path",
+                       @"image_url" : @"https://www.company.com/product/path.jpg"
+                    },
+                    @{
+                       @"product_id" : @"505bd76785ebb509fc183733",
+                       @"sku" : @"46493-3",
+                       @"name" : @"Uno Card Game",
+                       @"price" : @3,
+                       @"quantity" : @"2",
+                       @"category" : @"Games"
+                    }
+                ]
+            };
+            SEGTrackPayload *payload = [[SEGTrackPayload alloc] initWithEvent:@"Checkout Started" properties:properties context:@{} integrations:@{}];
+            [integration track:payload];
+            NSDictionary *expected = @{
+                @"order_id" : @"50314b8e9bcf000000000000",
+                @"affiliation" : @"Google Store",
+                @"value" : @30,
+                @"shipping" : @3,
+                @"tax" : @2,
+                @"discount" : @2.5,
+                @"coupon" : @"hasbro",
+                @"price" : @{
+                    @"currency" : @"USD",
+                    @"amount" : @2500
+                }, };
+            [verify(mockIntercom) logEventWithName:@"Checkout Started" metaData:expected];
+
         });
     });
 
@@ -176,7 +304,7 @@ describe(@"SEGIntercomIntegration", ^{
             [verify(mockIntercom) updateUser:userAttributes];
         });
 
-        it(@"identfied a known user with traits", ^{
+        it(@"identfies a known user with traits", ^{
             NSDateComponents *comps = [[NSDateComponents alloc] init];
             [comps setDay:10];
             [comps setMonth:10];
@@ -210,6 +338,13 @@ describe(@"SEGIntercomIntegration", ^{
 
             [integration identify:identifyPayload];
             [verify(mockIntercom) updateUser:userAttributes];
+        });
+
+        it(@"identfies a known user without traits", ^{
+            SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:@"3942084234230" anonymousId:nil traits:@{} context:@{} integrations:@{}];
+
+            [integration identify:identifyPayload];
+            [verify(mockIntercom) registerUserWithUserId:@"3942084234230"];
         });
 
         it(@"resets user", ^{

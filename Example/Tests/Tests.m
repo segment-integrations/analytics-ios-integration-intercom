@@ -135,7 +135,9 @@ describe(@"SEGIntercomIntegration", ^{
                 },
                 @"shipping" : @5.05,
                 @"tax" : @1.20,
-                @"category" : @"Games"
+                @"category" : @"Games",
+                @"total" : @30.45
+
             };
             [verify(mockIntercom) logEventWithName:@"Order Completed" metaData:expected];
 

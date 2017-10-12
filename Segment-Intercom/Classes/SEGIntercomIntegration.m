@@ -75,26 +75,20 @@
         return;
     }
 
-
-    NSMutableDictionary *original = [NSMutableDictionary dictionaryWithDictionary:payload.properties];
     NSMutableDictionary *output = [NSMutableDictionary dictionaryWithCapacity:payload.properties.count];
-
     NSMutableDictionary *price = [NSMutableDictionary dictionaryWithCapacity:0];
+    __block BOOL isAmountSet = false;
 
-    [original enumerateKeysAndObjectsUsingBlock:^(id key, id data, BOOL *stop) {
-
+    [payload.properties enumerateKeysAndObjectsUsingBlock:^(id key, id data, BOOL *stop) {
         [output setObject:data forKey:key];
-        if ([key isEqual:@"revenue"] || [key isEqual:@"total"]) {
+        if ([key isEqual:@"revenue"] || ([key isEqual:@"total"] && !isAmountSet)) {
             double dataValue = [data doubleValue];
             int amountInCents = dataValue * 100;
             NSNumber *finalAmount = [[NSNumber alloc] initWithInt:amountInCents];
             [price setObject:finalAmount forKey:@"amount"];
 
-            [original removeObjectForKey:@"revenue"];
-            [original removeObjectForKey:@"total"];
-
-            [output removeObjectForKey:@"revenue"];
-            [output removeObjectForKey:@"total"];
+            [output removeObjectForKey:key];
+            isAmountSet = @YES;
         }
 
         if ([key isEqual:@"currency"]) {

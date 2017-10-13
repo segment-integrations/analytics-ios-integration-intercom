@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Segment-Intercom'
-  s.version          = '0.1.0'
+  s.version          = '1.0.0-beta'
   s.summary          = 'Intercom Integration for Segment\'s analytics-ios library.'
 
   s.description      = <<-DESC

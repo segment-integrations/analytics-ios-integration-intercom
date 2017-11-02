@@ -1,5 +1,6 @@
 # Segment-Intercom
 
+[![CircleCI](https://circleci.com/gh/segment-integrations/analytics-ios-integration-intercom.svg?style=svg)](https://circleci.com/gh/segment-integrations/analytics-ios-integration-intercom)
 [![Version](https://img.shields.io/cocoapods/v/Segment-Intercom.svg?style=flat)](http://cocoapods.org/pods/Segment-Intercom)
 [![License](https://img.shields.io/cocoapods/l/Segment-Intercom.svg?style=flat)](http://cocoapods.org/pods/Segment-Intercom)
 [![Platform](https://img.shields.io/cocoapods/p/Segment-Intercom.svg?style=flat)](http://cocoapods.org/pods/Segment-Intercom)

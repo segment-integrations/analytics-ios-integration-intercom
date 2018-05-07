@@ -27,6 +27,9 @@
 
         [self.intercom setApiKey:mobileApiKey forAppId:appId];
         SEGLog(@"[self.intercom setApiKey:%@ forAppId:%@];", mobileApiKey, appId);
+
+        [self.intercom registerUnidentifiedUser];
+        SEGLog(@"[Intercom registerUnidentifiedUser];");
     }
 
 
@@ -130,6 +133,9 @@
 {
     [self.intercom reset];
     SEGLog(@" [Intercom reset];");
+
+    [self.intercom registerUnidentifiedUser];
+    SEGLog(@"[Intercom registerUnidentifiedUser];");
 }
 
 #pragma mark - Utils

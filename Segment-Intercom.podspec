@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'Segment-Intercom/Classes/**/*'
+  s.static_framework = true
   s.dependency 'Analytics', '~> 3.5'
   s.dependency 'Intercom'
 end

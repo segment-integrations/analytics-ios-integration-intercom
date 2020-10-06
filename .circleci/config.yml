@@ -8,14 +8,6 @@ jobs:
       - checkout
       - run: xcrun simctl list
       - run:
-          name: Add Nielsen credentials
-          command: |
-            cat >~/.netrc <<EOF
-              machine $NIELSEN_MACHINE
-              login $NIELSEN_SDK_LOGIN
-              password $NIELSEN_SDK_PASSWORD
-            EOF
-      - run:
           name: Install build dependencies
           command: |
             sudo gem install xcpretty

@@ -207,7 +207,6 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				5ECD239BD58F0837A5CAA101 /* [CP] Embed Pods Frameworks */,
 				7B5EFDBD4A891C01998A1D0B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -227,8 +226,6 @@
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				C3D367BA5D7A7B4616C43F28 /* [CP] Embed Pods Frameworks */,
-				4B0E9A3388CCA9CBAB8E0303 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -297,39 +294,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4B0E9A3388CCA9CBAB8E0303 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Tests/Pods-Segment-Intercom_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5ECD239BD58F0837A5CAA101 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Example/Pods-Segment-Intercom_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Segment-Intercom/Segment_Intercom.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Segment_Intercom.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Example/Pods-Segment-Intercom_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		69CACDA99E177087BC617709 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -354,37 +318,18 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Example/Pods-Segment-Intercom_Example-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Segment-Intercom_Example/Pods-Segment-Intercom_Example-resources.sh",
 				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/Intercom.bundle",
 				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/IntercomTranslations.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Intercom.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IntercomTranslations.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Example/Pods-Segment-Intercom_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C3D367BA5D7A7B4616C43F28 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Tests/Pods-Segment-Intercom_Tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Expecta/Expecta.framework",
-				"${BUILT_PRODUCTS_DIR}/Specta/Specta.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Expecta.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Specta.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Segment-Intercom_Tests/Pods-Segment-Intercom_Tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Segment-Intercom_Example/Pods-Segment-Intercom_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EDA59FC7369F2FD8D741152B /* [CP] Check Pods Manifest.lock */ = {

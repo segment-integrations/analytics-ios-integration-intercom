@@ -136,8 +136,8 @@
 
 - (void)reset
 {
-    [self.intercom reset];
-    SEGLog(@" [Intercom reset];");
+    [self.intercom logout];
+    SEGLog(@" [Intercom logout];");
 }
 
 #pragma mark - Utils

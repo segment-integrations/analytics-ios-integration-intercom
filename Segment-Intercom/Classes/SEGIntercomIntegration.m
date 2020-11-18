@@ -155,7 +155,7 @@
     }
 
     if (traits[@"user_id"]) {
-        userAttributes.userId = traits[@"user_id"];
+        userAttributes.userId = [NSString stringWithFormat:@"%@", traits[@"user_id"]];
         [customAttributes removeObjectForKey:@"user_id"];
     }
 

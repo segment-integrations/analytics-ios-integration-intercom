@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/segment-integrations/analytics-ios-integration-intercom.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/segment'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'Segment-Intercom/Classes/**/*'
   s.dependency 'Analytics'

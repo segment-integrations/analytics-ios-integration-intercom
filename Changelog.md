@@ -1,5 +1,10 @@
 Change Log
 ==========
+
+Version 1.0.2 *(2nd February, 2021)*
+-------------------------------------------
+* Fixed platform deployment target mismatch.
+
 Version 1.0.1 *(7th October, 2020)*
 -------------------------------------------
 * Update SEGAnalytics imports to support new namespacing introduced in v4.x

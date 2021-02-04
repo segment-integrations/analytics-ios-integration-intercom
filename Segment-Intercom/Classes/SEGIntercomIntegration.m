@@ -85,7 +85,7 @@
 
     NSMutableDictionary *output = [NSMutableDictionary dictionaryWithCapacity:payload.properties.count];
     NSMutableDictionary *price = [NSMutableDictionary dictionaryWithCapacity:0];
-    __block BOOL isAmountSet = false;
+    __block BOOL isAmountSet = NO;
 
     [payload.properties enumerateKeysAndObjectsUsingBlock:^(id key, id data, BOOL *stop) {
         [output setObject:data forKey:key];
@@ -96,7 +96,7 @@
             [price setObject:finalAmount forKey:@"amount"];
 
             [output removeObjectForKey:key];
-            isAmountSet = @YES;
+            isAmountSet = YES;
         }
 
         if ([key isEqual:@"currency"]) {

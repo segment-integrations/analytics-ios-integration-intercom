@@ -27,5 +27,5 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Segment-Intercom/Classes/**/*'
   s.dependency 'Analytics'
-  s.dependency 'Intercom'
+  s.dependency 'Intercom', '~> 9.3.5'
 end

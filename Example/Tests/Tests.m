@@ -44,7 +44,9 @@ describe(@"SEGIntercomIntegration", ^{
             } context:@{}
                 integrations:@{}];
             [integration identify:identifyPayload];
-            [verify(mockIntercom) registerUserWithUserId:@"3942084234230"];
+            ICMUserAttributes *attributes = [ICMUserAttributes new];
+            attributes.userId = @"3942084234230";
+            [verify(mockIntercom) loginUserWithUserAttributes:attributes success:nil failure:nil];
         });
 
         it(@"calls track without properties", ^{
@@ -100,7 +102,7 @@ describe(@"SEGIntercomIntegration", ^{
             ICMUserAttributes *userAttributes = [ICMUserAttributes new];
             userAttributes.companies = @[ company ];
 
-            [verify(mockIntercom) updateUser:userAttributes];
+            [verify(mockIntercom) updateUser:userAttributes success:nil failure:nil];
         });
 
         it(@"calls track with revenue and total", ^{
@@ -191,7 +193,7 @@ describe(@"SEGIntercomIntegration", ^{
             } context:@{}
                 integrations:@{}];
             [integration identify:identifyPayload];
-            [verify(mockIntercom) registerUnidentifiedUser];
+            [verify(mockIntercom) loginUnidentifiedUserWithSuccess:nil failure:nil];
         });
 
         it(@"calls track with properties", ^{
@@ -301,7 +303,7 @@ describe(@"SEGIntercomIntegration", ^{
             userAttributes.companies = @[ company ];
 
             [integration identify:identifyPayload];
-            [verify(mockIntercom) updateUser:userAttributes];
+            [verify(mockIntercom) updateUser:userAttributes success:nil failure:nil];
         });
 
         it(@"identfies a known user with traits", ^{
@@ -337,19 +339,21 @@ describe(@"SEGIntercomIntegration", ^{
             };
 
             [integration identify:identifyPayload];
-            [verify(mockIntercom) updateUser:userAttributes];
+            [verify(mockIntercom) updateUser:userAttributes success:nil failure:nil];
         });
 
         it(@"identfies a known user without traits", ^{
             SEGIdentifyPayload *identifyPayload = [[SEGIdentifyPayload alloc] initWithUserId:@"3942084234230" anonymousId:nil traits:@{} context:@{} integrations:@{}];
 
             [integration identify:identifyPayload];
-            [verify(mockIntercom) registerUserWithUserId:@"3942084234230"];
+            ICMUserAttributes *attributes = [ICMUserAttributes new];
+            attributes.userId = @"3942084234230";
+            [verify(mockIntercom) loginUserWithUserAttributes:attributes success:nil failure:nil];
         });
 
         it(@"resets user", ^{
             [integration reset];
-            [verify(mockIntercom) reset];
+            [verify(mockIntercom) logout];
         });
 
     });

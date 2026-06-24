@@ -54,11 +54,13 @@
 {
     // Intercom allows users to choose to track only known or only unknown users, as well as both. Segment will support the ability to track both by checking for loggedIn users (determined by the userId) and falling back to setting the user as "Unidentified" if this is not present.
     if (payload.userId) {
-        [self.intercom registerUserWithUserId:payload.userId];
-        SEGLog(@"[Intercom registerUserWithUserId:%@];", payload.userId);
+        ICMUserAttributes *attributes = [ICMUserAttributes new];
+        attributes.userId = payload.userId;
+        [self.intercom loginUserWithUserAttributes:attributes success:nil failure:nil];
+        SEGLog(@"[Intercom loginUserWithUserAttributes:%@];", payload.userId);
     } else if (payload.anonymousId) {
-        [self.intercom registerUnidentifiedUser];
-        SEGLog(@"[Intercom registerUnidentifiedUser];");
+        [self.intercom loginUnidentifiedUserWithSuccess:nil failure:nil];
+        SEGLog(@"[Intercom loginUnidentifiedUserWithSuccess];");
     }
 
     NSDictionary *integration = [payload.integrations valueForKey:@"intercom"];
@@ -96,7 +98,7 @@
             [price setObject:finalAmount forKey:@"amount"];
 
             [output removeObjectForKey:key];
-            isAmountSet = @YES;
+            isAmountSet = true;
         }
 
         if ([key isEqual:@"currency"]) {
@@ -130,14 +132,14 @@
     ICMUserAttributes *userAttributes = [ICMUserAttributes new];
     userAttributes.companies = @[ company ];
 
-    [self.intercom updateUser:userAttributes];
+    [self.intercom updateUser:userAttributes success:nil failure:nil];
     SEGLog(@"[Intercom updateUser:%@];", userAttributes);
 }
 
 - (void)reset
 {
-    [self.intercom reset];
-    SEGLog(@" [Intercom reset];");
+    [self.intercom logout];
+    SEGLog(@" [Intercom logout];");
 }
 
 #pragma mark - Utils
@@ -204,7 +206,7 @@
     }
 
     userAttributes.customAttributes = customAttributes;
-    [self.intercom updateUser:userAttributes];
+    [self.intercom updateUser:userAttributes success:nil failure:nil];
     SEGLog(@"[Intercom updateUser:%@];", userAttributes);
 }
 
